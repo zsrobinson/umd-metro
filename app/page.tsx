@@ -17,7 +17,7 @@ export default async function Page() {
         ))}
       </div>
 
-      <h1 className="text-neutral-700">
+      <h1 className="text-center text-neutral-700">
         Sometimes the API is funky, I can&apos;t do anything about that
       </h1>
     </main>
@@ -121,7 +121,7 @@ function Train({ train }: { train: UniqueTrain }) {
         {train.line}
       </div>
       <div className="flex flex-col">
-        <p className="text-3xl font-semibold uppercase">{train.destination}</p>
+        <p className="text-3xl font-semibold">{train.destination}</p>
         <p className="text-xl text-neutral-400">
           {train.isBoarding ? "Boarding" : train.isArriving && "Arriving"}
           {(train.isArriving || train.isBoarding) && " · "}
