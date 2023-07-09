@@ -11,7 +11,7 @@ type LayoutProps = { children: React.ReactNode };
 export default function Layout({ children }: LayoutProps) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-black text-white">{children}</body>
+      <body className="bg-black text-white">{children}</body>
     </html>
   );
 }

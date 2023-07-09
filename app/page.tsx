@@ -1,30 +1,21 @@
+import { Reloader } from "./reloader";
+
 export default async function Page() {
   const trains = await getRailPredictions();
   const uniqueTrains = getUniqueTrains(trains);
 
   return (
-    <main className="flex flex-col gap-4 p-8">
-      <h1>UMD Metro · Upcoming Trains</h1>
+    <main className="flex min-h-screen flex-col items-center gap-4 p-8">
+      <h1 className="font-bold text-neutral-600">
+        UMD Metro · Upcoming Trains
+      </h1>
+      <Reloader />
 
-      {uniqueTrains.map((train) => (
-        <div className="flex items-center gap-4" key={train.destination}>
-          <div className="flex h-24 w-24 items-center justify-center rounded-full bg-green-800 text-5xl font-bold">
-            {train.line}
-          </div>
-          <div className="flex flex-col">
-            <p className="text-3xl font-semibold uppercase">
-              {train.destination}
-            </p>
-            <p className="text-xl text-zinc-400">
-              {train.isBoarding ? "Boarding" : train.isArriving && "Arriving"}
-              {(train.isArriving || train.isBoarding) && " · "}
-
-              {train.minutes.length === 0 && "No upcoming trains"}
-              {train.minutes.length > 0 && train.minutes.join(", ") + " min"}
-            </p>
-          </div>
-        </div>
-      ))}
+      <div className="my-auto flex max-w-fit flex-col divide-y divide-neutral-800 overflow-hidden rounded-2xl border border-neutral-800">
+        {uniqueTrains.map((train) => (
+          <Train train={train} key={train.destination} />
+        ))}
+      </div>
     </main>
   );
 }
@@ -47,7 +38,7 @@ async function getRailPredictions(station: string = "E09") {
     {
       // this is the demo key don't worry
       headers: { api_key: "e13626d03d8e4c03ac07f95541b3091b" },
-      // next: { revalidate: 60 },
+      next: { revalidate: 25 },
     }
   );
 
@@ -103,4 +94,38 @@ function getUniqueTrains(trains: APIRailPrediction[]) {
   uniqueTrains.sort((a, b) => a.destination.localeCompare(b.destination));
 
   return uniqueTrains;
+}
+
+function Train({ train }: { train: UniqueTrain }) {
+  return (
+    <div className="flex items-center gap-4 p-8 transition-colors hover:bg-neutral-950">
+      <div
+        className={`flex h-24 w-24 flex-shrink-0 items-center justify-center rounded-full text-5xl font-bold ${
+          train.line === "GR"
+            ? "bg-green-700"
+            : train.line === "YL"
+            ? "bg-yellow-400 text-black"
+            : train.line === "OR"
+            ? "bg-orange-400 text-black"
+            : train.line === "BL"
+            ? "bg-blue-600"
+            : train.line === "RD"
+            ? "bg-red-600"
+            : "bg-neutral-500 text-black"
+        }`}
+      >
+        {train.line}
+      </div>
+      <div className="flex flex-col">
+        <p className="text-3xl font-semibold uppercase">{train.destination}</p>
+        <p className="text-xl text-neutral-400">
+          {train.isBoarding ? "Boarding" : train.isArriving && "Arriving"}
+          {(train.isArriving || train.isBoarding) && " · "}
+
+          {train.minutes.length === 0 && "No upcoming trains"}
+          {train.minutes.length > 0 && train.minutes.join(", ") + " min"}
+        </p>
+      </div>
+    </div>
+  );
 }
