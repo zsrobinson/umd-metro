@@ -16,6 +16,10 @@ export default async function Page() {
           <Train train={train} key={train.destination} />
         ))}
       </div>
+
+      <h1 className="text-neutral-700">
+        Sometimes the API is funky, I can&apos;t do anything about that
+      </h1>
     </main>
   );
 }
