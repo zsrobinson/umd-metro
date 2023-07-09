@@ -42,7 +42,8 @@ async function getRailPredictions(station: string = "E09") {
     {
       // this is the demo key don't worry
       headers: { api_key: "e13626d03d8e4c03ac07f95541b3091b" },
-      next: { revalidate: 25 },
+      // next: { revalidate: 25 },
+      cache: "no-store",
     }
   );
 
